@@ -40,7 +40,7 @@ class Recorder {
 
   public start = (msg: IMessage)  => {
     if (msg.messageType !== MessageType.START) { return; }
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
+    const currentFileName = "test.opus";
     const filePath = path.resolve(this.uploadPath, "audio", currentFileName);
 
     const stream = fs.createWriteStream(filePath);
@@ -60,7 +60,7 @@ class Recorder {
   public resume = (msg: IMessage, callback?: (err: VPError, messageId?: string, duration?: number) => void): void => {
     if (msg.messageType !== MessageType.AUDIO) { return; }
 
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
+    const currentFileName = "test.opus";
     const stream = this.recordStreamsSet[currentFileName];
     if (!stream) {
       logger.error(`RESUME STREAM UNAVAILABLE fileName: ${currentFileName}` +
@@ -126,7 +126,7 @@ class Recorder {
 
     if (msg.messageType !== MessageType.STOP) { return; }
 
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"),);
+    const currentFileName = "test.opus";
     const stream = this.recordStreamsSet[currentFileName];
     if (!stream) {
         callback(null, msg.messageId, 0);
@@ -151,7 +151,7 @@ class Recorder {
       return;
     }
 
-    const fileName = util.format("%d_%d_%s_%s.txt", msg.channelType, MessageType.TEXT, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
+    const fileName = "test.txt";
 
     const filePath = path.resolve(this.uploadPath, "text", fileName);
     const stream = fs.createWriteStream(filePath);
@@ -203,11 +203,7 @@ class Recorder {
           msg.messageType !== MessageType.IMAGE ||
           msg.messageType !== MessageType.INTERACTIVE)) { return; }
 
-    const currentFileName = util.format(
-      "%d_%d_%s_%s.%s", msg.channelType,
-      ((msg.messageType === MessageType.STOP) ? MessageType.AUDIO : msg.messageType),
-      msg.toId, msg.fromId,
-      ((msg.messageType === MessageType.STOP) ? "opus" : "txt"));
+    const currentFileName = "test.opus";
 
     const now = Date.now();
     const startTime = this.recordStartTimesSet[currentFileName];
@@ -216,17 +212,9 @@ class Recorder {
 
     let uploadFileName: string;
     if (msg.messageType === MessageType.STOP) {
-      uploadFileName = util.format(
-        "%d_%d_%s_%s_%d_%dms.%s", msg.channelType,
-        ((msg.messageType === MessageType.STOP) ? MessageType.AUDIO : msg.messageType),
-        msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"), now, duration,
-        ((msg.messageType === MessageType.STOP) ? "opus" : "txt"));
+      uploadFileName = "test.opus";
     } else {
-      uploadFileName = util.format(
-        "%d_%d_%s_%s_%d.%s", msg.channelType,
-        ((msg.messageType === MessageType.STOP) ? MessageType.AUDIO : msg.messageType),
-        msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"), now,
-        ((msg.messageType === MessageType.STOP) ? "opus" : "txt"));
+      uploadFileName = "test.opus";
     }
 
     callback(null, uploadFileName, duration); // callback even before uploading succeed
