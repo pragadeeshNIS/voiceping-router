@@ -151,7 +151,7 @@ class Recorder {
       return;
     }
 
-    const fileName = util.format("%d_%d_%s_%s.txt", msg.channelType, MessageType.TEXT, msg.toId, msg.fromId);
+    const fileName = util.format("%d_%d_%s_%s.txt", msg.channelType, MessageType.TEXT, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
 
     const filePath = path.resolve(this.uploadPath, "text", fileName);
     const stream = fs.createWriteStream(filePath);
@@ -219,13 +219,13 @@ class Recorder {
       uploadFileName = util.format(
         "%d_%d_%s_%s_%d_%dms.%s", msg.channelType,
         ((msg.messageType === MessageType.STOP) ? MessageType.AUDIO : msg.messageType),
-        msg.toId, msg.fromId, now, duration,
+        msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"), now, duration,
         ((msg.messageType === MessageType.STOP) ? "opus" : "txt"));
     } else {
       uploadFileName = util.format(
         "%d_%d_%s_%s_%d.%s", msg.channelType,
         ((msg.messageType === MessageType.STOP) ? MessageType.AUDIO : msg.messageType),
-        msg.toId, msg.fromId, now,
+        msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"), now,
         ((msg.messageType === MessageType.STOP) ? "opus" : "txt"));
     }
 
@@ -253,6 +253,8 @@ class Recorder {
 
     const currentFilePath = path.resolve(this.uploadPath, dirName, currentFileName);
     const uploadFilePath = path.resolve(this.uploadPath, dirName, uploadFileName);
+    logger.info(`current file : ${currentFilePath}`);
+    logger.info(`upload file : ${uploadFilePath}`);
     Q.Promise((resolve, reject) => {
       fs.rename(currentFilePath, uploadFilePath, (err) => {
         if (err) { return reject(err); }
