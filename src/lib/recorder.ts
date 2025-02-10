@@ -40,7 +40,7 @@ class Recorder {
 
   public start = (msg: IMessage)  => {
     if (msg.messageType !== MessageType.START) { return; }
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId, msg.fromId);
+    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
     const filePath = path.resolve(this.uploadPath, "audio", currentFileName);
 
     const stream = fs.createWriteStream(filePath);
@@ -60,7 +60,7 @@ class Recorder {
   public resume = (msg: IMessage, callback?: (err: VPError, messageId?: string, duration?: number) => void): void => {
     if (msg.messageType !== MessageType.AUDIO) { return; }
 
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId, msg.fromId);
+    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"));
     const stream = this.recordStreamsSet[currentFileName];
     if (!stream) {
       logger.error(`RESUME STREAM UNAVAILABLE fileName: ${currentFileName}` +
@@ -126,7 +126,7 @@ class Recorder {
 
     if (msg.messageType !== MessageType.STOP) { return; }
 
-    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId, msg.fromId);
+    const currentFileName = util.format("%d_%d_%s_%s.opus", msg.channelType, MessageType.AUDIO, msg.toId.toString().replace("*","_"), msg.fromId.toString().replace("*","_"),);
     const stream = this.recordStreamsSet[currentFileName];
     if (!stream) {
         callback(null, msg.messageId, 0);
