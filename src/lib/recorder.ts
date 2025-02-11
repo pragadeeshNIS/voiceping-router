@@ -134,7 +134,7 @@ class Recorder {
     }
 
     stream.end(() => {
-      // delete this.recordStreamsSet[currentFileName];
+      delete this.recordStreamsSet[currentFileName];
       this.upload(msg, (err, messageId, duration) => {
         callback(err, messageId, duration);
       });
@@ -212,7 +212,7 @@ class Recorder {
     const now = Date.now();
     const startTime = this.recordStartTimesSet[currentFileName];
     const duration = now - startTime;
-    // delete this.recordStartTimesSet[currentFileName];
+    delete this.recordStartTimesSet[currentFileName];
 
     let uploadFileName: string;
     if (msg.messageType === MessageType.STOP) {

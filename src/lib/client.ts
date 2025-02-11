@@ -206,7 +206,10 @@ export default class Client extends EventEmitter {
   private handlePrivateAudioMessage(this: Client, msg: IMessage) {
     Recorder.resume(msg);
     // this.server.sendMessageToUser(msg);
-    this.emit("message", msg, this);
+    Recorder.save(msg, (err, messageId) => {
+      this.emit("message", msg, this);
+    })
+    
   }
 
   private handlePrivateStartMessage(this: Client, msg: IMessage) {
@@ -406,12 +409,14 @@ export default class Client extends EventEmitter {
 
   private handleGroupAudioMessage(this: Client, msg: IMessage) {
     logger.info(`handleGroupAudioMessage id ${msg.fromId} to ${msg.toId} messageType ${msg.messageType}`);
-    States.updateAudioTimeOfGroup(msg.toId);
-    Recorder.resume(msg, (err, messageId, duration) => {
-      if (err) { debug(`id: ${this.id} recorder.resume: err: ${err} messageId: ${messageId}` +
-                       ` duration: ${duration}`); }
-      this.emit("message", msg, this);
-    });
+    Recorder.save(msg, (err, messageId) => {
+      States.updateAudioTimeOfGroup(msg.toId);
+      Recorder.resume(msg, (err, messageId, duration) => {
+        if (err) { debug(`id: ${this.id} recorder.resume: err: ${err} messageId: ${messageId}` +
+                         ` duration: ${duration}`); }
+        this.emit("message", msg, this);
+      });
+    })
   }
 
   private handleGroupStartMessage(this: Client, msg: IMessage) {
