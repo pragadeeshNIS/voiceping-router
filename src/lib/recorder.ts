@@ -134,7 +134,7 @@ class Recorder {
     }
 
     stream.end(() => {
-      delete this.recordStreamsSet[currentFileName];
+      // delete this.recordStreamsSet[currentFileName];
       this.upload(msg, (err, messageId, duration) => {
         callback(err, messageId, duration);
       });
@@ -145,11 +145,11 @@ class Recorder {
                  callback: (err: Error,
                             messageId: string) => void): void => {
 
-    if (!(msg.messageType !== MessageType.TEXT ||
-          msg.messageType !== MessageType.IMAGE ||
-          msg.messageType !== MessageType.INTERACTIVE)) {
-      return;
-    }
+    // if (!(msg.messageType !== MessageType.TEXT ||
+    //       msg.messageType !== MessageType.IMAGE ||
+    //       msg.messageType !== MessageType.INTERACTIVE)) {
+    //   return;
+    // }
 
     const fileName = util.format("%d_%d_%s_%s.txt", msg.channelType, MessageType.TEXT, msg.toId, msg.fromId);
 
@@ -212,7 +212,7 @@ class Recorder {
     const now = Date.now();
     const startTime = this.recordStartTimesSet[currentFileName];
     const duration = now - startTime;
-    delete this.recordStartTimesSet[currentFileName];
+    // delete this.recordStartTimesSet[currentFileName];
 
     let uploadFileName: string;
     if (msg.messageType === MessageType.STOP) {
