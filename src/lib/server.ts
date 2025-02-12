@@ -107,16 +107,17 @@ class Server implements IServer {
   }
 
   private handleClientMessage = (msg: IMessage, client: Client) => {
-    logger.info(`handleClientMessage id ${msg.fromId} to ${msg.toId} messageType ${msg.messageType}`);
-    if (msg.channelType === ChannelType.GROUP) {
-      if (msg.messageType === MessageType.CONNECTION) {
-        this.handleConnectionMessage(msg);
-      } else {
-        this.sendMessageToGroup(msg);
-      }
-    } else {
-      this.sendMessageToUser(msg);
-    }
+    logger.info(`handleClientMessage id ${msg.fromId} to ${msg.toId} messageType ${msg.messageType} , channelType : ${msg.channelType}`);
+    this.sendMessageToUser(msg);
+    // if (msg.channelType === ChannelType.GROUP) {
+    //   if (msg.messageType === MessageType.CONNECTION) {
+    //     this.handleConnectionMessage(msg);
+    //   } else {
+    //     this.sendMessageToGroup(msg);
+    //   }
+    // } else {
+    //   this.sendMessageToUser(msg);
+    // }
   }
 
   private registerClient(this: Server, socket: WebSocket, id: numberOrString,
