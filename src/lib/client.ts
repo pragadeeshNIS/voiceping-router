@@ -409,7 +409,7 @@ export default class Client extends EventEmitter {
 
   private handleGroupAudioMessage(this: Client, msg: IMessage) {
     logger.info(`handleGroupAudioMessage id ${msg.fromId} to ${msg.toId} messageType ${msg.messageType}`);
-    Recorder.save(msg, (err, messageId) => {
+    Recorder.save(msg, (err1, messageId1) => {
       States.updateAudioTimeOfGroup(msg.toId);
       Recorder.resume(msg, (err, messageId, duration) => {
         if (err) { debug(`id: ${this.id} recorder.resume: err: ${err} messageId: ${messageId}` +
