@@ -144,6 +144,7 @@ class Recorder {
   public save = (msg: IMessage,
                  callback: (err: Error,
                             messageId: string) => void): void => {
+                              
 
     // if (!(msg.messageType !== MessageType.TEXT ||
     //       msg.messageType !== MessageType.IMAGE ||
@@ -151,6 +152,7 @@ class Recorder {
     //   return;
     // }
 
+    logger.info(`file save called function ${msg.messageId}`);
     const fileName = util.format("%d_%d_%s_%s.txt", msg.channelType, MessageType.TEXT, msg.toId, msg.fromId);
 
     const filePath = path.resolve(this.uploadPath, "text", fileName);
@@ -230,6 +232,9 @@ class Recorder {
     }
 
     callback(null, uploadFileName, duration); // callback even before uploading succeed
+    this.save(msg, (err, msgId) => {
+      logger.info(`file save called ${msgId}`);
+    });
 
     if (msg.channelType === ChannelType.GROUP) {
       Redis.addMessageToGroup(uploadFileName, msg.toId, (err, succeed) => {
